@@ -64,7 +64,10 @@ class AOCInput:
         return self._file
 
     def _request_input(self):
-        return requests.get(self._url(), cookies={"session": self._session}).text
+        response = requests.get(self._url(), cookies={"session": self._session})
+        if response.ok:
+            return response.text
+        raise Exception("Getting input did not succeed!")
 
     @property
     def _session(self):
@@ -110,6 +113,8 @@ class AOCInput:
             return "Wrong level!"
         elif "Please don't repeatedly request this endpoint" in response:
             return "Puzzle still locked! (or wrong day)"
+        elif "You're posting too much data." in response:
+            return "Answer is too large (in bytes)."
         return "Unknown response:\n" + response
 
 

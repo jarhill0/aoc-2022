@@ -5,7 +5,10 @@ import re
 import subprocess
 from sys import argv, stderr, exit
 
-import requests
+from requests import Session
+
+session = Session()
+session.headers['User-Agent'] = 'AOC runner by Joey <joe@reeshill.net>'
 
 
 def main():
@@ -64,7 +67,7 @@ class AOCInput:
         return self._file
 
     def _request_input(self):
-        response = requests.get(self._url(), cookies={"session": self._session})
+        response = session.get(self._url(), cookies={"session": self._session})
         if response.ok:
             return response.text
         raise Exception("Getting input did not succeed!")
@@ -93,7 +96,7 @@ class AOCInput:
 
     def _post_answer(self, part, answer):
         url = self.answer_url.format(year=self.year, day=self.day)
-        return requests.post(
+        return session.post(
             url,
             data={"answer": answer, "level": part},
             cookies={"session": self._session},

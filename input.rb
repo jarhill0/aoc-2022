@@ -8,7 +8,7 @@ class Input
   end
 
   def lines
-    @content.split
+    @content.split("\n")
   end
 
   def grouped_lines

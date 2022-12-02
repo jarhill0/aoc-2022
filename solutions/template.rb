@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative 'input'
+require_relative 'solution'
 
-class Day0
+class Day0 < Solution
   def solve
     INP.lines
   end
@@ -11,7 +12,4 @@ class Day0
   end
 end
 
-d = Day0.new
-p d.solve
-ans2 = d.solve2
-p ans2 if ans2
+Day0.new.execute

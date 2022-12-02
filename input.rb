@@ -3,6 +3,10 @@ class Input
     @content = STDIN.read
   end
 
+  def content
+    @content
+  end
+
   def lines
     @content.split
   end

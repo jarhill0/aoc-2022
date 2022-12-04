@@ -8,15 +8,15 @@ class Input
   end
 
   def lines
-    @content.split("\n")
+    @lines ||= @content.split("\n")
   end
 
   def grouped_lines
-    @content.split("\n\n").map(&:split)
+    @grouped_lines ||= @content.split("\n\n").map(&:split)
   end
 
   def ints
-    lines.map(&:to_i)
+    @ints ||= lines.map(&:to_i)
   end
 end
 

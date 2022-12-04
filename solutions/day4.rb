@@ -5,12 +5,12 @@ require_relative 'solution'
 
 class Day4 < Solution
   def solve
-    ranges.count {|r| full_contained(*r)}
+    ranges.count { |r| full_contained(*r) }
   end
 
   def ranges
     INP.lines.map do |l|
-      l.split(',').map{|a| a.split('-').map(&:to_i)}
+      l.split(',').map { |a| a.split('-').map(&:to_i) }
     end
   end
 
@@ -19,11 +19,10 @@ class Day4 < Solution
   end
 
   def solve2
-    ranges.count {|r| any_overlap(*r)}
+    ranges.count { |r| any_overlap(*r) }
   end
 
   def any_overlap(a, b)
-
     a[0] <= b[1] && a[1] >= b[0] || b[0] <= a[1] && b[1] >= a[0]
   end
 end

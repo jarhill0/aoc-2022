@@ -13,6 +13,6 @@ class Solution
   private
 
   def print_if_present(x)
-    p x if x
+    puts x.to_s if x
   end
 end

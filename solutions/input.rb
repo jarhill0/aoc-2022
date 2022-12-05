@@ -12,7 +12,7 @@ class Input
   end
 
   def grouped_lines
-    @grouped_lines ||= @content.split("\n\n").map(&:split)
+    @grouped_lines ||= @content.split("\n\n").map { |l| l.split("\n") }
   end
 
   def ints

@@ -53,13 +53,10 @@ class Day5 < Solution
   end
 
   def move2(q, s, d)
-    return if q <= 0
+    rev_items = []
 
-    obj = @stacks[s].pop
-
-    move(q - 1, s, d)
-
-    @stacks[d].push(obj)
+    q.times { rev_items.push(@stacks[s].pop) }
+    q.times { @stacks[d].push(rev_items.pop) }
   end
 end
 

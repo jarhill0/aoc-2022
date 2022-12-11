@@ -15,6 +15,10 @@ class Input
     @grouped_lines ||= @content.split("\n\n").map { |l| l.split("\n") }
   end
 
+  def split_lines
+    @lines ||= @content.split("\n").map(&:split)
+  end
+
   def ints
     @ints ||= lines.map(&:to_i)
   end

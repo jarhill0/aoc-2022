@@ -13,10 +13,10 @@ class Day12 < Solution
     @map ||= Map.new(INP.lines.map(&:chars))
   end
 
-  def shortest_path_length
-    visited = Set.new
+  def shortest_path_length(start = nil)
     path_length = 0
-    curr = [map.start]
+    curr = start || [map.start]
+    visited = Set.new(curr)
 
     loop do
       new_curr = []
@@ -35,6 +35,7 @@ class Day12 < Solution
   end
 
   def solve2
+    shortest_path_length(map.squares_at(0))
   end
 end
 
@@ -50,6 +51,16 @@ class Map
     neighbors.filter do |neighbor|
       height(*neighbor) <= me + 1
     end
+  end
+
+  def squares_at(height)
+    squares = []
+    each_square do |square, coords|
+      if value(square) == height
+        squares << coords
+      end
+    end
+    squares
   end
 
   def start

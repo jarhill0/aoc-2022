@@ -5,7 +5,7 @@ require_relative 'solution'
 
 class Day13 < Solution
   def solve
-    packets.each_with_index.map { |p, i| right_order(p) ? i + 1 : 0 }.sum
+    packet_pairs.each_with_index.map { |p, i| right_order(p) ? i + 1 : 0 }.sum
   end
 
   def right_order(pair)
@@ -50,19 +50,34 @@ class Day13 < Solution
     end
   end
 
-  def packets
-    @packets ||= INP.grouped_lines.map do |group|
+  def packet_pairs
+    @packet_pairs ||= INP.grouped_lines.map do |group|
       group.map do |line|
         parse_list(line)
       end.freeze
     end.freeze
   end
 
-  def parse_list(line)
-    eval(line)
+  def packets
+    @packets ||= INP.lines.filter { |l| l.length > 0 }.map do |line|
+      parse_list(line)
+    end.freeze
   end
 
+  def parse_list(line)
+    eval(line).freeze
+  end
+
+  DIVIDERS = [[[2]], [[6]]].freeze
+
   def solve2
+    all_packets = packets + DIVIDERS
+    all_packets.sort! do |left, right|
+      compare(left, right)
+    end
+    DIVIDERS.map do |divider|
+      all_packets.index(divider) + 1
+    end.reduce(:*)
   end
 end
 

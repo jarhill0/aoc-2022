@@ -9,7 +9,6 @@ class Day14 < Solution
   def solve
     @m = map
     @bottom = bottom_of @m
-    p @bottom
 
     c = 0
     while place_sand
@@ -18,14 +17,16 @@ class Day14 < Solution
     c
   end
 
-  def place_sand
+  def place_sand(stop_at_floor = true)
+    return false if get_block(SAND_SOURCE) != AIR
+
     x, y = SAND_SOURCE
     loop do
       xn, yn = next_loc(x, y)
       if xn == x && yn == y
         set_block([x, y], SAND)
         return true # at rest
-      elsif yn >= @bottom
+      elsif stop_at_floor && yn >= @bottom
         return false # fell off
       end
       x, y = xn, yn
@@ -57,6 +58,8 @@ class Day14 < Solution
   end
 
   def get_block(coords)
+    return ROCK if coords[1] == floor
+
     @m[coords] || AIR
   end
 
@@ -107,7 +110,19 @@ class Day14 < Solution
     map.filter { |_k, v| v == ROCK }.map { |coords, _| coords[1] }.max + 1
   end
 
+  def floor
+    @bottom + 1
+  end
+
   def solve2
+    @m = map
+    @bottom = bottom_of @m
+
+    c = 0
+    while place_sand(false)
+      c += 1
+    end
+    c
   end
 end
 

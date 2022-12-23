@@ -2,6 +2,7 @@
 
 require_relative 'input'
 require_relative 'solution'
+require 'set'
 
 class Day0 < Solution
   def solve

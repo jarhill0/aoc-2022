@@ -14,7 +14,7 @@ class Day2
 
   def score1(opponent, me)
     outcome = (me - opponent + 1) % 3
-    me + 3 * outcome
+    me + (3 * outcome)
   end
 
   def solve2
@@ -22,8 +22,8 @@ class Day2
   end
 
   def score2(opponent, outcome)
-    me = (opponent + outcome) % 3 + 1
-    me + 3 * (outcome - 1)
+    me = ((opponent + outcome) % 3) + 1
+    me + (3 * (outcome - 1))
   end
 
   private

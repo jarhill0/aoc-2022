@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 require_relative 'input'
 
 class Day1
   def solve
-    INP.grouped_lines.map {|g| g.map(&:to_i).sum}.max
+    INP.grouped_lines.map { |g| g.map(&:to_i).sum }.max
   end
 
   def solve2
-    INP.grouped_lines.map {|g| g.map(&:to_i).sum}.sort.reverse.first(3).sum
+    INP.grouped_lines.map { |g| g.map(&:to_i).sum }.sort.reverse.first(3).sum
   end
 end
 

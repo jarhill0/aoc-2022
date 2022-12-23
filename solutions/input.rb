@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 class Input
   def initialize
-    @content = STDIN.read
+    @content = $stdin.read
   end
 
-  def content
-    @content
-  end
+  attr_reader :content
 
   def lines
     @lines ||= @content.split("\n")
@@ -16,7 +16,7 @@ class Input
   end
 
   def split_lines
-    @lines ||= @content.split("\n").map(&:split)
+    @split_lines ||= @content.split("\n").map(&:split)
   end
 
   def ints

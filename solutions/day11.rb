@@ -16,15 +16,15 @@ class Day11 < Solution
 
   def starting_state
     monkeys = []
-    monkeys.push *(INP.grouped_lines.map do |monkey|
-      Monkey.from(monkey, Proc.new { |dest, item| monkeys[dest].receive(item) })
-    end)
+    monkeys.push(*(INP.grouped_lines.map do |monkey|
+      Monkey.from(monkey, proc { |dest, item| monkeys[dest].receive(item) })
+    end))
     $lcm_set = true
     monkeys
   end
 
   def shenanigans(monkeys, num_rounds)
-    num_rounds.times do |i|
+    num_rounds.times do |_i|
       monkeys.each(&:take_turn)
     end
   end
@@ -32,7 +32,7 @@ class Day11 < Solution
   def solve2
     $div_by_three = false
     monkeys = starting_state
-    shenanigans(monkeys, 10000)
+    shenanigans(monkeys, 10_000)
     monkeys.map(&:inspection_count).sort.last(2).inject(&:*)
   end
 end
@@ -46,18 +46,14 @@ class Monkey
     @tx_item = tx_item
   end
 
-  def inspection_count
-    @inspection_count
-  end
+  attr_reader :inspection_count
 
   def receive(item)
     @items.push(item)
   end
 
   def take_turn
-    until @items.empty?
-      inspect_and_throw @items.shift
-    end
+    inspect_and_throw @items.shift until @items.empty?
   end
 
   def inspect_and_throw(item)
@@ -73,18 +69,18 @@ class Monkey
   def self.from(lines, tx_item)
     _, starting_items, operation, test, test_true, test_false = lines
     items = starting_items.split(':').last.split(', ').map(&:to_i)
-    operation = self.parse_op(operation.split('=').last.strip)
+    operation = parse_op(operation.split('=').last.strip)
     divisor = test.split.last.to_i
     $lcm *= divisor unless $lcm_set
     true_dest = test_true.split.last.to_i
     false_dest = test_false.split.last.to_i
-    recipient = Proc.new { |worry_level| worry_level % divisor == 0 ? true_dest : false_dest }
-    Monkey.new(items: items, operation: operation, recipient: recipient, tx_item: tx_item)
+    recipient = proc { |worry_level| (worry_level % divisor).zero? ? true_dest : false_dest }
+    Monkey.new(items:, operation:, recipient:, tx_item:)
   end
 
   def self.parse_op(operation)
     operand1, operator, operand2 = operation.split
-    Proc.new do |old|
+    proc do |old|
       op1 = operand1 == 'old' ? old : operand1.to_i
       op2 = operand2 == 'old' ? old : operand2.to_i
       op1.send(operator, op2)

@@ -56,26 +56,20 @@ class Map
   def squares_at(height)
     squares = []
     each_square do |square, coords|
-      if value(square) == height
-        squares << coords
-      end
+      squares << coords if value(square) == height
     end
     squares
   end
 
   def start
     @start ||= each_square do |square, coords|
-      if square == 'S'
-        return coords
-      end
+      return coords if square == 'S'
     end
   end
 
   def end
     @end ||= each_square do |square, coords|
-      if square == 'E'
-        return coords
-      end
+      return coords if square == 'E'
     end
   end
 
@@ -88,11 +82,11 @@ class Map
   end
 
   def height(r, c)
-    return 100 if r < 0 || r >= @grid.length
+    return 100 if r.negative? || r >= @grid.length
 
     row = @grid[r]
 
-    return 101 if c < 0 || c >= row.length
+    return 101 if c.negative? || c >= row.length
 
     value(row[c])
   end

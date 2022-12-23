@@ -26,7 +26,7 @@ class Day9 < Solution
   def update_links(links, move_dir)
     prev = nil
     links.map do |link|
-      new_link = if prev == nil
+      new_link = if prev.nil?
                    move_head(link, move_dir).freeze
                  else
                    move_tail(prev, link).freeze
@@ -62,11 +62,10 @@ class Day9 < Solution
     if dist_sq <= 2 # touching
       tail
     elsif dist_sq == 4 # one step back, linearly
-      [tx + vx / 2, ty + vy / 2]
+      [tx + (vx / 2), ty + (vy / 2)]
     else # need a diag move
-      [tx + vx / vx.abs, ty + vy / vy.abs]
+      [tx + (vx / vx.abs), ty + (vy / vy.abs)]
     end
-
   end
 
   def moves

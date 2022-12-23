@@ -8,8 +8,7 @@ class Day0 < Solution
     INP.lines
   end
 
-  def solve2
-  end
+  def solve2; end
 end
 
 Day0.new.execute

@@ -56,13 +56,13 @@ class Day8 < Solution
   end
 
   def scenic_score(tree, r, c)
-    return 0 if r == 0 || c == 0 || r == trees.length - 1 || c == trees.first.length - 1
+    return 0 if r.zero? || c.zero? || r == trees.length - 1 || c == trees.first.length - 1
 
     u_dist = d_dist = l_dist = r_dist = 1
 
     begin
       ru = r - 1
-      while ru >= 0 and trees[ru][c] < tree
+      while (ru >= 0) && (trees[ru][c] < tree)
         ru -= 1
         u_dist += 1 if ru >= 0
       end
@@ -70,7 +70,7 @@ class Day8 < Solution
 
     begin
       row_down = r + 1
-      while row_down < trees.length and trees[row_down][c] < tree
+      while (row_down < trees.length) && (trees[row_down][c] < tree)
         row_down += 1
         d_dist += 1 if row_down < trees.length
       end
@@ -78,7 +78,7 @@ class Day8 < Solution
 
     begin
       cl = c - 1
-      while cl >= 0 and trees[r][cl] < tree
+      while (cl >= 0) && (trees[r][cl] < tree)
         cl -= 1
         l_dist += 1 if cl >= 0
       end
@@ -86,19 +86,15 @@ class Day8 < Solution
 
     begin
       cr = c + 1
-      while cr < trees.first.length and trees[r][cr] < tree
+      while (cr < trees.first.length) && (trees[r][cr] < tree)
         cr += 1
         r_dist += 1 if cr < trees.first.length
       end
     end
 
     ans = u_dist * d_dist * l_dist * r_dist
-    if ans == 299880
-      STDERR.puts "299880 at (#{r}, #{c})"
-    end
-    if r == 3 && c == 2
-      STDERR.puts "udlr, #{u_dist} #{d_dist}, #{l_dist}, #{r_dist}"
-    end
+    warn "299880 at (#{r}, #{c})" if ans == 299_880
+    warn "udlr, #{u_dist} #{d_dist}, #{l_dist}, #{r_dist}" if r == 3 && c == 2
     ans
   end
 

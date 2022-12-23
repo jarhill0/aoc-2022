@@ -16,14 +16,12 @@ class Day5 < Solution
     stacks = Array.new(num_stacks) { [] }
     INP.content.split("\n\n")[0].split("\n").each do |line|
       (0..(num_stacks - 1)).each do |i|
-        true_i = 1 + i * 4
+        true_i = 1 + (i * 4)
         c = line[true_i]
-        if 'A' <= c && c <= 'Z'
-          stacks[i].push(c)
-        end
+        stacks[i].push(c) if c >= 'A' && c <= 'Z'
       end
     end
-    stacks.each { |s| s.reverse! }
+    stacks.each(&:reverse!)
     stacks
   end
 

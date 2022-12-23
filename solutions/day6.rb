@@ -11,12 +11,10 @@ class Day6 < Solution
     INP.content.chars.each do |c|
       i += 1
       buff.push(c)
-      if buff.length == 4
-        if Set.new(buff).length == 4
-          return i
-        end
-        buff.delete_at(0)
-      end
+      next unless buff.length == 4
+      return i if Set.new(buff).length == 4
+
+      buff.delete_at(0)
     end
   end
 
@@ -26,12 +24,10 @@ class Day6 < Solution
     INP.content.chars.each do |c|
       i += 1
       buff.push(c)
-      if buff.length == 14
-        if Set.new(buff).length == 14
-          return i
-        end
-        buff.delete_at(0)
-      end
+      next unless buff.length == 14
+      return i if Set.new(buff).length == 14
+
+      buff.delete_at(0)
     end
   end
 end

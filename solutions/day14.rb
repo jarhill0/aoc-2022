@@ -11,9 +11,7 @@ class Day14 < Solution
     @bottom = bottom_of @m
 
     c = 0
-    while place_sand
-      c += 1
-    end
+    c += 1 while place_sand
     c
   end
 
@@ -29,7 +27,8 @@ class Day14 < Solution
       elsif stop_at_floor && yn >= @bottom
         return false # fell off
       end
-      x, y = xn, yn
+      x = xn
+      y = yn
     end
   end
 
@@ -73,7 +72,7 @@ class Day14 < Solution
       prev = nil
       line.split(' -> ').each do |point|
         point = point.split(',').map(&:to_i)
-        if prev != nil
+        unless prev.nil?
           iter_points(prev, point) do |pt|
             map[pt] = ROCK
           end
@@ -89,7 +88,7 @@ class Day14 < Solution
 
     dx = e[0] - s[0]
     dy = e[1] - s[1]
-    if dy == 0
+    if dy.zero?
       sx = dx / dx.abs
       x = s[0]
       while x != e[0]
@@ -119,9 +118,7 @@ class Day14 < Solution
     @bottom = bottom_of @m
 
     c = 0
-    while place_sand(false)
-      c += 1
-    end
+    c += 1 while place_sand(false)
     c
   end
 end

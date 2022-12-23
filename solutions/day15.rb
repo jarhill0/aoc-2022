@@ -4,7 +4,7 @@ require_relative 'input'
 require_relative 'solution'
 
 class Day15 < Solution
-  P1_ROW = 2000000
+  P1_ROW = 2_000_000
 
   def solve
     solve_row(P1_ROW).length
@@ -23,15 +23,15 @@ class Day15 < Solution
   end
 
   def solve2
-    (0..4000000).each do |y|
+    4_000_001.times do |y|
       row = solve_row(y)
-      p y if y % 10000 == 0
+      p y if (y % 10_000).zero?
       # p row if y % 10000 == 0
 
-      if row.num_ranges > 1
-        (0..4000000).each do |x|
-          p [x, y] unless row.include?(x)
-        end
+      next unless row.num_ranges > 1
+
+      4_000_001.times do |x|
+        p [x, y] unless row.include?(x)
       end
     end
   end
@@ -52,25 +52,22 @@ class Day15 < Solution
     end
 
     parsed.each do |_, beacon|
-      if beacon[1] == y_coord
-        no_beacon.remove(beacon[0])
-      end
+      no_beacon.remove(beacon[0]) if beacon[1] == y_coord
     end
 
     no_beacon
   end
 
-  CANDIDATES = [[2882446, 1934422],
-                [1581951, 2271709],
-                [2638485, 2650264],
-                [3133845, 3162635],
-                [2229474, 3709584],
-  ].map(&:freeze).freeze
+  CANDIDATES = [[2_882_446, 1_934_422],
+                [1_581_951, 2_271_709],
+                [2_638_485, 2_650_264],
+                [3_133_845, 3_162_635],
+                [2_229_474, 3_709_584]].map(&:freeze).freeze
 
   def solve2b
     CANDIDATES.filter do |x, y|
-      return unless x >= 0 && x <= 4000000
-      return unless y >= 0 && y <= 4000000
+      return unless x >= 0 && x <= 4_000_000
+      return unless y >= 0 && y <= 4_000_000
 
       !covered?(x, y)
     end.map { |pt| frequency(pt) }.first
@@ -87,13 +84,13 @@ class Day15 < Solution
 
   def frequency(point)
     x, y = point
-    x * 4000000 + y
+    (x * 4_000_000) + y
   end
 end
 
 class Range
   def overlaps?(other)
-    raise "Got a #{other.class} but expected a Range" unless other.class == Range
+    raise "Got a #{other.class} but expected a Range" unless other.instance_of?(Range)
 
     include?(other.begin) ||
       include?(other.end) ||
@@ -149,7 +146,7 @@ class RangeSet
 
   def nonoverlapping_insert(range)
     ind = @ranges.each_with_index.find { |r, _i| range.end < r.begin }
-    if ind == nil
+    if ind.nil?
       @ranges << range
     else
       @ranges.insert(ind[1], range)
@@ -167,7 +164,7 @@ class RangeSet
   end
 
   def split(range, at)
-    [(range.begin..(at - 1)), ((at + 1)..range.end)].filter { |r| r.length > 0 }
+    [(range.begin..(at - 1)), ((at + 1)..range.end)].filter { |r| r.length.positive? }
   end
 end
 

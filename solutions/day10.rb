@@ -8,9 +8,7 @@ class Day10 < Solution
     init_prog
     run_prog(19)
     sum = signal_strength
-    while run_prog(40)
-      sum += signal_strength
-    end
+    sum += signal_strength while run_prog(40)
     sum
   end
 
@@ -59,9 +57,7 @@ class Day10 < Solution
     init_prog
     init_screen
     draw_pixel
-    while run_prog(1)
-      draw_pixel
-    end
+    draw_pixel while run_prog(1)
     show_screen
   end
 

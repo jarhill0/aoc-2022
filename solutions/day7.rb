@@ -11,7 +11,7 @@ class Day7 < Solution
 
   def solve
     trace_history
-    walk_directories.filter_map { |d| dir_size(d) <= 100000 ? dir_size(d) : nil }.sum
+    walk_directories.filter_map { |d| dir_size(d) <= 100_000 ? dir_size(d) : nil }.sum
   end
 
   def trace_history
@@ -37,6 +37,7 @@ class Day7 < Solution
   def cd(dir_name)
     @pwd.pop and return if dir_name == '..'
     return if dir_name == '/'
+
     wd[dir_name] ||= {}
     @pwd.push(wd[dir_name])
   end
@@ -57,7 +58,7 @@ class Day7 < Solution
 
   def dwalker(y, d = @root)
     d.each_value do |val|
-      if val.class == Hash
+      if val.instance_of?(Hash)
         y << val
         dwalker(y, val)
       end
@@ -66,7 +67,7 @@ class Day7 < Solution
 
   def dir_size(dir)
     dir[:size] ||= dir.values.sum do |item|
-      if item.class == Integer
+      if item.instance_of?(Integer)
         item
       else
         dir_size(item)
@@ -74,7 +75,7 @@ class Day7 < Solution
     end
   end
 
-  MAX_FS_SIZE = 40000000
+  MAX_FS_SIZE = 40_000_000
 
   def solve2
     need_to_free = dir_size(@root) - MAX_FS_SIZE

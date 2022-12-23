@@ -18,24 +18,24 @@ class Day13 < Solution
 
   def compare(left, right)
     left.zip(right) do |l_elem, r_elem|
-      break if r_elem == nil # Ruby's zip is stupid
+      break if r_elem.nil? # Ruby's zip is stupid
 
-      if l_elem.class == Integer && r_elem.class == Integer
+      if l_elem.instance_of?(Integer) && r_elem.instance_of?(Integer)
         if l_elem < r_elem
           return LEFT_LOWER
         elsif l_elem > r_elem
           return LEFT_HIGHER
         end
 
-      elsif l_elem.class == Array && r_elem.class == Array
+      elsif l_elem.instance_of?(Array) && r_elem.instance_of?(Array)
         result = compare(l_elem, r_elem)
         return result if result != EQUAL
 
-      elsif l_elem.class == Integer
+      elsif l_elem.instance_of?(Integer)
         result = compare([l_elem], r_elem)
         return result if result != EQUAL
 
-      elsif r_elem.class == Integer
+      elsif r_elem.instance_of?(Integer)
         result = compare(l_elem, [r_elem])
         return result if result != EQUAL
       end
@@ -59,7 +59,7 @@ class Day13 < Solution
   end
 
   def packets
-    @packets ||= INP.lines.filter { |l| l.length > 0 }.map do |line|
+    @packets ||= INP.lines.filter { |l| l.length.positive? }.map do |line|
       parse_list(line)
     end.freeze
   end

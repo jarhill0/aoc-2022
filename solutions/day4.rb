@@ -15,7 +15,7 @@ class Day4 < Solution
   end
 
   def full_contained(a, b)
-    a[0] <= b[0] && a[1] >= b[1] || b[0] <= a[0] && b[1] >= a[1]
+    (a[0] <= b[0] && a[1] >= b[1]) || (b[0] <= a[0] && b[1] >= a[1])
   end
 
   def solve2
@@ -23,7 +23,7 @@ class Day4 < Solution
   end
 
   def any_overlap(a, b)
-    a[0] <= b[1] && a[1] >= b[0] || b[0] <= a[1] && b[1] >= a[0]
+    (a[0] <= b[1] && a[1] >= b[0]) || (b[0] <= a[1] && b[1] >= a[0])
   end
 end
 

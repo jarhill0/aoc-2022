@@ -5,15 +5,14 @@ require_relative 'solution'
 require 'set'
 
 class Day16 < Solution
-
   P1_MINUTES = 30
 
   def solve
-    best_flow
+    greedy
   end
 
   def valves
-    @valves ||= Hash[INP.split_lines.map do |line|
+    @valves ||= INP.split_lines.to_h do |line|
       name = line[1]
       rate = line[4].split('=').last.to_i
       connections = line[9..].map do |c|
@@ -24,8 +23,45 @@ class Day16 < Solution
         end
       end
 
-      [name, { rate: rate, connections: connections }.freeze]
-    end].freeze
+      [name, { rate:, connections: }.freeze]
+    end.freeze
+  end
+
+  def greedy
+    location = 'AA'
+    minutes_remaining = P1_MINUTES
+    valves_open = Set.new
+    total_flow = 0
+
+    while (valve, travel_time = next_valve(location, minutes_remaining, valves_open))
+      valves_open << valve
+      minutes_remaining -= travel_time
+      location = valve
+      total_flow += minutes_remaining * flow_rate(valve)
+
+      puts "== Minute #{P1_MINUTES - minutes_remaining} =="
+      puts "You open valve #{valve}."
+    end
+
+    total_flow
+  end
+
+  def next_valve(location, minutes_remaining, valves_open)
+    all_options = valve_options(valves_open)
+                  .map { |vn| [vn, distance(location, vn) + 1] }
+                  .filter { |_, enable_time| enable_time < minutes_remaining }
+    p(all_options.map do |valve_name, enable_time|
+      potential_gain = flow_rate(valve_name) * (minutes_remaining - enable_time)
+      [valve_name, potential_gain, enable_time, potential_gain / enable_time]
+    end)
+    all_options.max_by do |valve_name, enable_time|
+      potential_gain = flow_rate(valve_name) * (minutes_remaining - enable_time)
+      potential_gain / enable_time
+    end
+  end
+
+  def flow_rate(valve_name)
+    valves[valve_name][:rate]
   end
 
   def best_flow(current_location: 'AA', minutes_remaining: P1_MINUTES, valves_open: Set.new.freeze, total_so_far: 0)
@@ -33,7 +69,7 @@ class Day16 < Solution
 
     opts = valve_options(valves_open)
 
-    return total_so_far if opts.length == 0
+    return total_so_far if opts.length.zero?
 
     opts.map do |name|
       flow = valves[name][:rate]
@@ -45,13 +81,9 @@ class Day16 < Solution
         current_location: name,
         minutes_remaining: minutes_remaining - minutes_busy,
         valves_open: (valves_open + Set[name]).freeze,
-        total_so_far: total_so_far + flow * (minutes_remaining - minutes_busy)
+        total_so_far: total_so_far + (flow * (minutes_remaining - minutes_busy))
       )
     end.max
-  end
-
-  def total_flow(valves_open)
-    valves_open.map { |valve| valves[valve][:rate] }.sum
   end
 
   def valve_options(valves_open)
@@ -59,7 +91,7 @@ class Day16 < Solution
   end
 
   def nonzero_flow
-    valves.filter { |_k, v| v[:rate] > 0 }.sort_by { |_k, v| v[:rate] }.reverse
+    valves.filter { |_k, v| (v[:rate]).positive? }.sort_by { |_k, v| v[:rate] }.reverse
   end
 
   def distance(start, end_)
@@ -78,6 +110,7 @@ class Day16 < Solution
 
         valves[curr][:connections].each do |connection|
           next if visited.include?(connection)
+
           visited << connection
           new_points << connection
         end
@@ -88,8 +121,7 @@ class Day16 < Solution
     end
   end
 
-  def solve2
-  end
+  def solve2; end
 end
 
 Day16.new.execute

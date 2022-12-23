@@ -9,6 +9,7 @@ WIDTH = 7
 class Day17 < Solution
   def solve
     @player_inputs = player_inputs
+    @input_counter = 0
     @piece_inputs = piece_inputs
     @tiles = Tiles.new
 
@@ -22,6 +23,7 @@ class Day17 < Solution
 
     until piece.stopped
       piece.send(@player_inputs.next)
+      @input_counter = (@input_counter + 1) % player_input_length
       piece.down
     end
 
@@ -32,16 +34,86 @@ class Day17 < Solution
     INP.content.strip.chars.cycle
   end
 
+  def player_input_length
+    @player_input_length ||= INP.content.strip.length
+  end
+
   def piece_inputs
     [MinusShape, PlusShape, AngleShape, BarShape, SquareShape].cycle
   end
 
-  def solve2; end
+  P2_ROUNDS = 1000000000000
+
+  def solve2
+    @player_inputs = player_inputs
+    @input_counter = 0
+    @piece_inputs = piece_inputs
+    @tiles = Tiles.new
+
+    iteration_counter, piece_counter = detect_cycle
+
+    target_piece_counter = piece_counter
+    target_input_counter = @input_counter
+    iteration_counter_starting_loop = iteration_counter
+    height_before = @tiles.tower_height
+
+    drop_piece
+
+    iteration_counter += 1
+    piece_counter = (piece_counter + 1) % 5
+
+    until piece_counter == target_piece_counter && @input_counter == target_input_counter
+      drop_piece
+
+      iteration_counter += 1
+      piece_counter = (piece_counter + 1) % 5
+    end
+
+    cycle_length = iteration_counter - iteration_counter_starting_loop
+    height_diff_per_cycle = @tiles.tower_height - height_before
+
+
+    height_adjustment = 0
+
+    while iteration_counter + cycle_length <= P2_ROUNDS
+      height_adjustment += height_diff_per_cycle
+      iteration_counter += cycle_length
+    end
+
+    until iteration_counter == P2_ROUNDS
+      drop_piece
+      iteration_counter += 1
+    end
+
+    @tiles.tower_height + height_adjustment
+  end
+
+  def detect_cycle
+    iteration_counter = 0
+    piece_counter = 0
+
+    past_states = Set.new
+
+    loop do
+      drop_piece
+
+      iteration_counter += 1
+      piece_counter = (piece_counter + 1) % 5
+
+      if past_states.include?([piece_counter, @input_counter])
+        warn('REJOICE, FOR A LOOP HAS BEEN FOUND!')
+        return iteration_counter, piece_counter
+      end
+
+      past_states << [piece_counter, @input_counter].freeze
+    end
+  end
 end
 
 class Tiles
   def initialize
     @tile_rows = {}
+    @tower_height = 0
   end
 
   def row(row_ind)
@@ -55,11 +127,11 @@ class Tiles
   def fill(row_ind, col_ind)
     value = row(row_ind) | mask(col_ind)
     @tile_rows[row_ind] = value
+
+    @tower_height = row_ind + 1 if row_ind + 1 > @tower_height
   end
 
-  def tower_height
-    (@tile_rows.reject { |_, row| row.zero? }.keys.max || -1) + 1
-  end
+  attr_reader :tower_height
 
   def inspect
     (0..tower_height).map do |r|

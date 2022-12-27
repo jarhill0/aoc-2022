@@ -16,7 +16,7 @@ class Day18 < Solution
   end
 
   def covered_faces(cube1)
-    cubes.filter { |c| cube1 != c }.count do |cube2| # filter may be unnecessary
+    cubes.count do |cube2|
       shares_face(cube1, cube2)
     end
   end

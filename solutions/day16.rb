@@ -36,7 +36,7 @@ class Day16 < Solution
 
     opts = valve_options(valves_open)
 
-    return total_so_far if opts.length.zero?
+    return total_so_far if opts.empty?
 
     opts.map do |name|
       minutes_busy = distance(current_location, name) + 1
@@ -92,7 +92,55 @@ class Day16 < Solution
     end
   end
 
-  def solve2; end
+  P2_MINUTES = 26
+  def solve2
+    best_flow_with_elephant
+  end
+
+  def best_flow_with_elephant(
+    my_location: 'AA',
+    my_minutes_remaining: P2_MINUTES,
+    elephant_location: 'AA',
+    elephant_minutes_remaining: P2_MINUTES,
+    valves_open: Set.new.freeze,
+    total_so_far: 0
+  )
+    return 0 if my_minutes_remaining <= 0 && elephant_minutes_remaining <= 0
+
+    opts = valve_options(valves_open)
+
+    return total_so_far if opts.empty?
+
+    opts.flat_map do |name|
+      child_calls = []
+
+      my_minutes_busy = distance(my_location, name) + 1
+      if my_minutes_busy < my_minutes_remaining
+        child_calls << best_flow_with_elephant(
+          my_location: name,
+          my_minutes_remaining: my_minutes_remaining - my_minutes_busy,
+          valves_open: (valves_open + Set[name]).freeze,
+          total_so_far: total_so_far + (flow_rate(name) * (my_minutes_remaining - my_minutes_busy)),
+          elephant_location:,
+          elephant_minutes_remaining:
+        )
+      end
+
+      elephant_minutes_busy = distance(elephant_location, name) + 1
+      if elephant_minutes_busy < elephant_minutes_remaining
+        child_calls << best_flow_with_elephant(
+          elephant_location: name,
+          elephant_minutes_remaining: elephant_minutes_remaining - elephant_minutes_busy,
+          valves_open: (valves_open + Set[name]).freeze,
+          total_so_far: total_so_far + (flow_rate(name) * (elephant_minutes_remaining - elephant_minutes_busy)),
+          my_location:,
+          my_minutes_remaining:
+        )
+      end
+
+      child_calls.empty? ? total_so_far : child_calls
+    end.max
+  end
 end
 
 Day16.new.execute

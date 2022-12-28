@@ -26,6 +26,8 @@ class Day23 < Solution
   end
 
   def elf_round
+    any_moved = false
+
     # { desired_pos => [elves] }
     desires = {}
     @elves.each do |elf|
@@ -40,12 +42,20 @@ class Day23 < Solution
     desires.values.filter { |elves| elves.length == 1 }.each do |elves|
       elf = elves.first
       elf.move
+      any_moved = true
     end
 
     @direction_manager = @direction_manager.rotate
+
+    any_moved
   end
 
-  def solve2; end
+  def solve2
+    init_elves
+    round_count = 1
+    round_count += 1 while elf_round
+    round_count
+  end
 end
 
 class Map

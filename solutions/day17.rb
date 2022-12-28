@@ -42,7 +42,7 @@ class Day17 < Solution
     [MinusShape, PlusShape, AngleShape, BarShape, SquareShape].cycle
   end
 
-  P2_ROUNDS = 1000000000000
+  P2_ROUNDS = 1_000_000_000_000
 
   def solve2
     @player_inputs = player_inputs
@@ -71,7 +71,6 @@ class Day17 < Solution
 
     cycle_length = iteration_counter - iteration_counter_starting_loop
     height_diff_per_cycle = @tiles.tower_height - height_before
-
 
     height_adjustment = 0
 

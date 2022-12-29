@@ -35,8 +35,7 @@ class Day16 < Solution
     current_location: 'AA',
     minutes_remaining: P1_MINUTES,
     valves_open: Set.new.freeze,
-    total_so_far: 0,
-    want_at_least: nil
+    total_so_far: 0
   )
     return 0 if minutes_remaining <= 0
 
@@ -44,51 +43,18 @@ class Day16 < Solution
 
     return total_so_far if opts.empty?
 
-    if want_at_least
-      bound = upper_bound(valves_open:, minutes_remaining:)
-      if bound < want_at_least
-        # warn("Pruning: want #{want_at_least}; upper bound #{bound}")
-        return total_so_far
-      end
-    end
-
-    best_so_far = 0
-
     opts.map do |name|
       minutes_busy = distance(current_location, name) + 1
 
       next total_so_far if minutes_busy > minutes_remaining
 
-      result_for_option = best_flow(
+      best_flow(
         current_location: name,
         minutes_remaining: minutes_remaining - minutes_busy,
         valves_open: (valves_open + Set[name]).freeze,
         total_so_far: total_so_far + (flow_rate(name) * (minutes_remaining - minutes_busy)),
-        want_at_least: best_so_far,
       )
-
-      best_so_far = result_for_option if result_for_option > best_so_far
-
-      result_for_option
     end.max
-  end
-
-  def upper_bound(valves_open:, minutes_remaining:)
-    options = valve_options(valves_open).to_enum
-    bound = 0
-    until minutes_remaining < 2
-      begin
-        time_on = minutes_remaining - 1
-        total_flow = flow_rate(options.next) * time_on
-        bound += total_flow
-
-        minutes_remaining -= 2
-      rescue StopIteration
-        break
-      end
-    end
-
-    bound
   end
 
   def valve_options(valves_open)
@@ -133,38 +99,7 @@ class Day16 < Solution
 
   P2_MINUTES = 26
 
-  def solve2
-    my_best_flow_with_elephant
-  end
-
-  def my_best_flow_with_elephant(
-    my_location: 'AA',
-    my_minutes_remaining: P2_MINUTES,
-    valves_open: Set.new.freeze,
-    total_so_far: 0
-  )
-    return 0 if my_minutes_remaining <= 0
-
-    opts = valve_options(valves_open)
-
-    return total_so_far if opts.empty?
-
-    result_if_i_keep_going = opts.map do |name|
-      my_minutes_busy = distance(my_location, name) + 1
-      next total_so_far unless my_minutes_busy < my_minutes_remaining
-
-      my_best_flow_with_elephant(
-        my_location: name,
-        my_minutes_remaining: my_minutes_remaining - my_minutes_busy,
-        valves_open: (valves_open + Set[name]).freeze,
-        total_so_far: total_so_far + (flow_rate(name) * (my_minutes_remaining - my_minutes_busy)),
-      )
-    end.max
-
-    result_if_the_elephant_goes_now = best_flow(minutes_remaining: P2_MINUTES, valves_open:, total_so_far:)
-
-    [result_if_i_keep_going, result_if_the_elephant_goes_now].max
-  end
+  def solve2; end
 end
 
 Day16.new.execute

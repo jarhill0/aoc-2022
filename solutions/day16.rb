@@ -64,7 +64,7 @@ class Day16 < Solution
         minutes_remaining: minutes_remaining - minutes_busy,
         valves_open: (valves_open + Set[name]).freeze,
         total_so_far: total_so_far + (flow_rate(name) * (minutes_remaining - minutes_busy)),
-        want_at_least: best_so_far
+        want_at_least: best_so_far,
       )
 
       best_so_far = result_for_option if result_for_option > best_so_far
@@ -157,7 +157,7 @@ class Day16 < Solution
         my_location: name,
         my_minutes_remaining: my_minutes_remaining - my_minutes_busy,
         valves_open: (valves_open + Set[name]).freeze,
-        total_so_far: total_so_far + (flow_rate(name) * (my_minutes_remaining - my_minutes_busy))
+        total_so_far: total_so_far + (flow_rate(name) * (my_minutes_remaining - my_minutes_busy)),
       )
     end.max
 

@@ -73,7 +73,9 @@ class Blueprint
           spent[resource_type] = cost
         end
         warn(
-          "Spend #{spent.map { |n, amt| "#{amt} #{n}" }.join(' and ')} to start building a #{new_bot}-collecting robot."
+          "Spend #{spent.map do |n, amt|
+                     "#{amt} #{n}"
+                   end.join(' and ')} to start building a #{new_bot}-collecting robot.",
         )
       end
 
@@ -114,7 +116,7 @@ class Blueprint
         ore_bots: ore_bots + new_ore_bots,
         clay_bots: clay_bots + new_clay_bots,
         obsidian_bots: obsidian_bots + new_obsidian_bots,
-        geode_bots: geode_bots + new_geode_bots
+        geode_bots: geode_bots + new_geode_bots,
       )
     end.max
   end

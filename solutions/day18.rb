@@ -175,7 +175,7 @@ class AirPocketFinder
       [x, y - 1, z],
       [x, y + 1, z],
       [x, y, z - 1],
-      [x, y, z + 1]
+      [x, y, z + 1],
     ].each(&:freeze).freeze
   end
 

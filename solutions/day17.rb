@@ -215,7 +215,7 @@ end
 class SquareShape < Shape
   RAW_SHAPE = [
     [true, true],
-    [true, true]
+    [true, true],
   ].freeze_2d
 end
 
@@ -223,7 +223,7 @@ class PlusShape < Shape
   RAW_SHAPE = [
     [false, true, false],
     [true, true, true],
-    [false, true, false]
+    [false, true, false],
   ].freeze_2d
 end
 
@@ -231,7 +231,7 @@ class AngleShape < Shape
   RAW_SHAPE = [
     [false, false, true],
     [false, false, true],
-    [true, true, true]
+    [true, true, true],
   ].freeze_2d
 end
 

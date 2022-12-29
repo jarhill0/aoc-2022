@@ -61,7 +61,7 @@ class Day24 < Solution
     '>' => { direction: :horizontal, parity: 1 }.freeze,
     '<' => { direction: :horizontal, parity: -1 }.freeze,
     '^' => { direction: :vertical, parity: -1 }.freeze,
-    'v' => { direction: :vertical, parity: 1 }.freeze
+    'v' => { direction: :vertical, parity: 1 }.freeze,
   }.freeze
 
   def parsed_blizzards

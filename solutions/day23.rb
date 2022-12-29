@@ -170,7 +170,7 @@ class Elf
     north: [-1, 0].freeze,
     south: [1, 0].freeze,
     east: [0, 1].freeze,
-    west: [0, -1].freeze
+    west: [0, -1].freeze,
   }.freeze
 
   def step(*directions)

@@ -16,7 +16,7 @@ class Day22 < Solution
     right: [0, 1].freeze,
     left: [0, -1].freeze,
     up: [-1, 0].freeze,
-    down: [1, 0].freeze
+    down: [1, 0].freeze,
   }.freeze
   DIRECTIONS = %i[right down left up].freeze
 

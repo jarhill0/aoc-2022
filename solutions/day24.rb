@@ -9,7 +9,7 @@ class Day24 < Solution
     minutes_to_complete
   end
 
-  def minutes_to_complete
+  def minutes_to_complete(destinations = [finish])
     t = 0
     positions = Set[start]
 
@@ -17,7 +17,14 @@ class Day24 < Solution
       next_positions = Set.new
 
       positions.each do |position|
-        return t if position == finish
+        if position == destinations.first
+          destinations.shift
+          return t if destinations.empty?
+
+          next_positions = Set[position]
+
+          break
+        end
 
         options(position).each do |option|
           next_positions << option unless blizzards.occupied?(t + 1, *option)
@@ -75,7 +82,9 @@ class Day24 < Solution
     @finish ||= [height, INP.lines.last[1...-1].chars.index('.')].freeze
   end
 
-  def solve2; end
+  def solve2
+    minutes_to_complete([finish, start, finish])
+  end
 end
 
 class Blizzards
